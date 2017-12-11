@@ -35,10 +35,8 @@ class RadioField extends InputField {
                   index={index}
                 >
                   <RadioLineButton>
-                    {this.isSelected({value, id}) ? (
+                    {this.isSelected({value, id}) && (
                       <RadioLineButtonFill animate={value !== ''} />
-                    ) : (
-                      ''
                     )}
                   </RadioLineButton>
                   <RadioLineText>{name}</RadioLineText>
