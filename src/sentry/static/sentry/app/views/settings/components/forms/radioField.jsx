@@ -9,6 +9,7 @@ class RadioField extends InputField {
   static propTypes = {
     id: PropTypes.number,
     value: PropTypes.string,
+    choices: PropTypes.arrayOf(PropTypes.array).isRequired,
   };
 
   onChange = (value, onChange, onBlur, e) => {
@@ -26,8 +27,7 @@ class RadioField extends InputField {
         {...this.props}
         field={({onChange, onBlur, value, disabled, ...props}) => (
           <div>
-            {(props.choices() || []).map((choice, index) => {
-              const {id, name} = choice;
+            {(props.choices() || []).map(([id, name], index) => {
               return (
                 <RadioLineItem
                   key={id}

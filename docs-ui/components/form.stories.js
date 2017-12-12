@@ -95,11 +95,7 @@ storiesOf('Forms/Fields', module)
         <RadioField
           name="radio"
           label="Radio Field"
-          choices={() => [
-            {id: 0, name: 'Choice One'},
-            {id: 1, name: 'Choice Two'},
-            {id: 2, name: 'Choice Three'},
-          ]}
+          choices={() => [[0, 'Choice One'], [1, 'Choice Two'], [2, 'Choice Three']]}
         />
       </Form>
     ))
