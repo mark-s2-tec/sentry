@@ -5,7 +5,7 @@ import os
 import io
 import re
 
-LOCALES_DIR = 'src/sentry/data/error-locale'
+LOCALES_DIR = os.path.join(os.path.dirname(__file__), '../../data/error-locale')
 TARGET_LOCALE = 'en-US'
 
 translation_lookup_table = set()
@@ -25,19 +25,17 @@ for locale in os.listdir(LOCALES_DIR):
                 target_locale_lookup_table[key] = translation
             else:
                 translation_regexp = re.escape(translation)
-                # Some generic errors are substrings of more detailed ones, so we need an
-                # exact match
-                translation_regexp = '^' + \
-                    translation_regexp.replace(
-                        '\%s', '(?P<format_string_data>[a-zA-Z0-9-_\$]+)') + '$'
-                translation_regexp = re.compile(translation_regexp)
+                translation_regexp = translation_regexp.replace(
+                    '\%s', r'(?P<format_string_data>[a-zA-Z0-9-_\$]+)')
+                # Some errors are substrings of more detailed ones, so we need exact match
+                translation_regexp = re.compile('^' + translation_regexp + '$')
                 translation_lookup_table.add((translation_regexp, key))
 
 
 def find_translation(message):
     for translation in translation_lookup_table:
         translation_regexp, key = translation
-        match = translation_regexp.match(message)
+        match = translation_regexp.search(message)
 
         if match is not None:
             format_string_data = match.groupdict().get('format_string_data')
@@ -53,6 +51,8 @@ def find_translation(message):
 def format_message(message, data):
     return message.replace('%s', data)
 
+message_type_regexp = re.compile('^(?P<type>[a-zA-Z]*Error): (?P<message>.*)')
+
 
 def translate_message(original_message):
     if not isinstance(original_message, six.string_types):
@@ -63,7 +63,7 @@ def translate_message(original_message):
 
     # Handle both cases. Just a message and message preceeded with error type
     # eg. `ReferenceError: foo`, `TypeError: bar`
-    match = re.match('^(?P<type>[a-zA-Z]*Error): (?P<message>.*)', message)
+    match = message_type_regexp.search(message)
 
     if match is not None:
         type = match.groupdict().get('type')
