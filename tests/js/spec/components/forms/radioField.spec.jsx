@@ -24,7 +24,7 @@ describe('RadioField', function() {
         </Form>
       );
       wrapper
-        .find('.radioLineItem')
+        .find('[role="radio"]')
         .last()
         .simulate('click');
       expect(wrapper).toMatchSnapshot();

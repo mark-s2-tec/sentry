@@ -26,13 +26,15 @@ class RadioField extends InputField {
       <InputField
         {...this.props}
         field={({onChange, onBlur, value, disabled, ...props}) => (
-          <div>
+          <div role="radiogroup" aria-labelledby={props.label}>
             {(props.choices() || []).map(([id, name], index) => {
               return (
                 <RadioLineItem
                   key={index}
                   onClick={this.onChange.bind(this, id, onChange, onBlur)}
-                  className="radioLineItem"
+                  role="radio"
+                  tabIndex={this.isSelected({value, id}) ? 0 : -1}
+                  aria-checked={this.isSelected({value, id})}
                 >
                   <RadioLineButton>
                     {this.isSelected({value, id}) && (
@@ -50,13 +52,6 @@ class RadioField extends InputField {
   }
 }
 
-const RadioLineItem = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  margin-top: ${p => (p.index ? '0.5em' : '0')};
-`;
-
 const RadioLineButton = styled.div`
   width: 1.5em;
   height: 1.5em;
@@ -67,6 +62,18 @@ const RadioLineButton = styled.div`
   justify-content: center;
   border: 1px solid ${p => p.theme.borderLight};
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.04);
+`;
+
+const RadioLineItem = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-top: ${p => (p.index ? '0.5em' : '0')};
+  outline: none;
+
+  :focus ${RadioLineButton} {
+    border: 1px solid ${p => p.theme.borderDark};
+  }
 `;
 
 const RadioLineButtonFill = styled.div`
