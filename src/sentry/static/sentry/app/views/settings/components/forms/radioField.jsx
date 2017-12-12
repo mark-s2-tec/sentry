@@ -9,7 +9,7 @@ class RadioField extends InputField {
   static propTypes = {
     id: PropTypes.number,
     value: PropTypes.string,
-    choices: PropTypes.arrayOf(PropTypes.array).isRequired,
+    choices: PropTypes.func,
   };
 
   onChange = (value, onChange, onBlur, e) => {
@@ -30,9 +30,9 @@ class RadioField extends InputField {
             {(props.choices() || []).map(([id, name], index) => {
               return (
                 <RadioLineItem
-                  key={id}
+                  key={index}
                   onClick={this.onChange.bind(this, id, onChange, onBlur)}
-                  index={index}
+                  className="radioLineItem"
                 >
                   <RadioLineButton>
                     {this.isSelected({value, id}) && (
