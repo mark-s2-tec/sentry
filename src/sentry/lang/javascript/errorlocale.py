@@ -6,9 +6,10 @@ import io
 import re
 
 LOCALES_DIR = 'src/sentry/data/error-locale'
+TARGET_LOCALE = 'en-US'
 
 translation_lookup_table = set()
-target_locale = {}
+target_locale_lookup_table = {}
 
 for locale in os.listdir(LOCALES_DIR):
     fn = os.path.join(LOCALES_DIR, locale)
@@ -20,8 +21,8 @@ for locale in os.listdir(LOCALES_DIR):
             key, translation = line.split(',', 1)
             translation = translation.strip()
 
-            if 'en-US' in locale:
-                target_locale[key] = translation
+            if TARGET_LOCALE in locale:
+                target_locale_lookup_table[key] = translation
             else:
                 translation_regexp = re.escape(translation)
                 # Some generic errors are substrings of more detailed ones, so we need an
@@ -73,7 +74,7 @@ def translate_message(original_message):
     if translation is None:
         return original_message
     else:
-        translated_message = target_locale.get(translation, original_message)
+        translated_message = target_locale_lookup_table.get(translation, original_message)
 
         if type is not None:
             translated_message = type + ': ' + translated_message

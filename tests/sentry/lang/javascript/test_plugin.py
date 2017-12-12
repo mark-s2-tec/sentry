@@ -245,17 +245,17 @@ class JavascriptIntegrationTest(TestCase):
             'message': 'hello',
             'platform': 'javascript',
             'sentry.interfaces.Message': {
-                'message': 'ReferenceError: Impossible de définir une propriété « foo » : objet non extensible'
+                'message': u'ReferenceError: Impossible de d\xe9finir une propri\xe9t\xe9 \xab foo \xbb : objet non extensible'
             },
             'sentry.interfaces.Exception': {
                 'values': [
                     {
                         'type': 'Error',
-                        'value': 'Příliš mnoho souborů'
+                        'value': u'P\u0159\xedli\u0161 mnoho soubor\u016f'
                     },
                     {
                         'type': 'Error',
-                        'value': 'foo: wystąpił nieoczekiwany błąd podczas próby uzyskania informacji o metadanych'
+                        'value': u'foo: wyst\u0105pi\u0142 nieoczekiwany b\u0142\u0105d podczas pr\xf3by uzyskania informacji o metadanych'
                     }
                 ],
             }
