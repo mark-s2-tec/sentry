@@ -617,11 +617,19 @@ LOGGING = {
             'filters': ['sentry:internal'],
             'class': 'raven.contrib.django.handlers.SentryHandler',
         },
+        'metrics': {
+            'filters': ['django_metrics'],
+            'class': 'sentry.logging.handlers.MetricsLogHandler',
+        },
     },
     'filters': {
         'sentry:internal': {
             '()': 'sentry.utils.raven.SentryInternalFilter',
         },
+        'django_metrics': {
+            '()': 'sentry.logging.handlers.MessageContainsFilter',
+            'contains': ["CSRF"]
+        }
     },
     'root': {
         'level': 'NOTSET',
@@ -666,8 +674,8 @@ LOGGING = {
             'level': 'INFO',
         },
         'django.request': {
-            'level': 'ERROR',
-            'handlers': ['console'],
+            'level': 'WARNING',
+            'handlers': ['console', 'metrics'],
             'propagate': False,
         },
         'toronado': {
